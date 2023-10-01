@@ -1,5 +1,6 @@
 package com.j0k3r.eggnews.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,11 +27,13 @@ public class Noticia {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(length = 200)
     private String titulo;
 
+    @Column(length = 15000)
     private String texto;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
 
     private String autor;

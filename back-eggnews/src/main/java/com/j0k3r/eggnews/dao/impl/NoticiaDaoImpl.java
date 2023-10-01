@@ -18,12 +18,12 @@ public class NoticiaDaoImpl implements NoticiaDao{
 
     @Override
     public Iterable<Noticia> listarNoticias() {
-        return noticiaRepositorio.findByAlta(true);
+        return noticiaRepositorio.findByAltaOrderByFechaAlta(true);
     }
 
     @Override
     public Iterable<Noticia> listarNoticiasAdmin() {
-        return noticiaRepositorio.findAll();
+        return noticiaRepositorio.findAllOrderByFechaAltaDesc();
     }
 
     @Override

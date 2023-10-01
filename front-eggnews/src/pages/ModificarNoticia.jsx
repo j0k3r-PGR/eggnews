@@ -7,40 +7,46 @@ export default function ModificarNoticia() {
 
     const [noticia, setNoticia] = useState({})
 
-    const [guardado, setGuardado] = useState(false)
+    const [guardado, setGuardado] = useState(false);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:8080/noticias/buscar/'+ id)
+        fetch('http://localhost:8080/noticias/buscar/' + id)
             .then(res => res.json())
-            .then(noticia => setNoticia(noticia))
+            .then(res => setNoticia(res))
     }, [])
 
     const handleChange = (e) => {
         console.log(e.target.checked)
         setNoticia({
-            ...noticia, 
-            [e.target.name]: e.target.value 
+            ...noticia,
+            [e.target.name]: e.target.value
         })
     }
 
     const handleChangeCheck = (e) => {
-        console.log(e.target.checked)
         setNoticia({
-           ...noticia, 
-            [e.target.name]: e.target.checked 
+            ...noticia,
+            [e.target.name]: e.target.checked
         })
     }
 
-    const handleClick = (e) => {
+    const handleClick = async (e) => {
         e.preventDefault()
-        fetch('http://localhost:8080/noticias/modificar/'+id, {
+        const response = await fetch('http://localhost:8080/noticias/modificar/' + id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(noticia)
-        })
-      .then(res => setGuardado(res.status === 200))
+        });
+        if (response.ok) {
+            setError(false)
+            setGuardado(response.ok)
+        } else {
+            setGuardado(false)
+            setError(true)
+        }
     }
 
     return (
@@ -51,7 +57,7 @@ export default function ModificarNoticia() {
                     <form action="">
                         <div className="form-group">
                             <label>Titulo</label>
-                            <input type="text" className="form-control" value={noticia.titulo} name="titulo" onChange={handleChange}/>
+                            <input type="text" className="form-control" value={noticia.titulo} name="titulo" onChange={handleChange} />
                         </div>
                         <div className="form-group mt-3">
                             <label>Texto</label>
@@ -63,13 +69,25 @@ export default function ModificarNoticia() {
                         </div>
                         <div className="form-group mt-3">
                             <label>Alta</label>
-                            <input type="checkbox" defaultChecked={noticia.alta} name="alta" onClick={handleChangeCheck} />
+                            <input type="checkbox" className="checkbox" defaultChecked={noticia.alta} name="alta" onClick={handleChangeCheck} />
                         </div>
 
                         <button type="submit" className="btn btn-primary" onClick={handleClick}>Modificar</button>
                     </form>
                     {
-                        guardado && <p>Noticia modificada</p>
+                        guardado &&
+                        <div className="alert alert-success guardado-exito container" role="alert">
+                            <p>Noticia guardada con éxito</p>
+                            <button className="btn-close" onClick={() => setGuardado(false)} aria-label="Close"></button>
+                            <Link to="/admin/listar" className="btn btn-primary btn-volver">Volver</Link>
+                        </div>
+                    }
+                    {
+                        error &&
+                        <div className="alert alert-danger error-guardado" role="alert">
+                            Todos los campos son obligatorios
+                            <button className="btn-close" onClick={() => setError(false)} aria-label="Close"></button>
+                        </div>
                     }
                 </div>
                 <div>

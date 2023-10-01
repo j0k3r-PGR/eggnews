@@ -7,9 +7,9 @@ import Home from './pages/Home.jsx'
 import './index.css'
 import CargaNoticia from './pages/CargaNoticia.jsx'
 import Admin from './pages/Admin.jsx'
-import ListarNoticias from './pages/ListarNoticias.jsx'
 import ModificarNoticia from './pages/ModificarNoticia.jsx'
 import ListarNoticiasAdmin from './pages/ListarNoticiasAdmin.jsx'
+import Notice from './pages/Notice.jsx'
 
 const route = createBrowserRouter([{
   path : "/",
@@ -32,8 +32,8 @@ const route = createBrowserRouter([{
       element : <ListarNoticiasAdmin />
     }]
   },{
-    path : "/noticias",
-    element : <ListarNoticias />
+    path : "noticia/:id",
+    element : <Notice />
   }]
 }])
 

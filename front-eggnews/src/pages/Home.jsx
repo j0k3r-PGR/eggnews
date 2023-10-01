@@ -9,7 +9,7 @@ export default function Home(){
     useEffect(() => {
         fetch('http://localhost:8080/noticias/listar')
             .then(res => res.json())
-            .then(noticias => setNoticias(noticias))
+            .then(noticias => setNoticias(noticias.reverse()))
     },[])
 
     return(
