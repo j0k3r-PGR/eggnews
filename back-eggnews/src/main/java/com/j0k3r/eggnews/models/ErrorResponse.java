@@ -8,12 +8,12 @@ import lombok.Data;
 @Data
 public class ErrorResponse {
     private HttpStatus statusCode;
-    private String message;
+    private String statusText;
     private String details;
 
-    public ErrorResponse(HttpStatus statusCode, String message) {
+    public ErrorResponse(HttpStatus statusCode, String statusText) {
         this.statusCode = statusCode;
-        this.message = message;
+        this.statusText = statusText;
     }
 
 }

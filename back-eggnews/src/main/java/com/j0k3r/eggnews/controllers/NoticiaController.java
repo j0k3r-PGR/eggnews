@@ -3,6 +3,7 @@ package com.j0k3r.eggnews.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,15 +48,14 @@ public class NoticiaController {
     }
 
     @CrossOrigin("http://localhost:5173")
-    @PostMapping("/modalta/{id}")
-    public ResponseEntity<?> modificarAltaNoticia(@PathVariable Long id){
-        return noticiaService.modificarAltaNoticia(id);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id){
+        return noticiaService.eliminarNoticia(id);
     }
 
     @CrossOrigin("http://localhost:5173")
     @PostMapping("/modificar/{id}")
     public ResponseEntity<?> modificarNoticia(@PathVariable Long id, @RequestBody NoticiaDtoSend noticia){
-        System.out.println(noticia.isAlta());
         return noticiaService.modificarNoticia(noticia.getId(),noticia.getTitulo(),noticia.getTexto(),noticia.getAutor(),noticia.isAlta());
     }
     

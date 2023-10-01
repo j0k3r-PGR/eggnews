@@ -14,7 +14,7 @@ export default function Home(){
 
     return(
         <div className="container"> 
-            <h2>Noticias</h2>
+            <h2 className="mt-3">Todas Las Noticias</h2>
 
                 {
                     noticias.length === 0 && 

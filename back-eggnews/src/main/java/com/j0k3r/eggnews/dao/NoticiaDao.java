@@ -19,4 +19,5 @@ public interface NoticiaDao {
 
     void modificarNoticia(Noticia noticia);
 
+    void eliminarNoticia(Noticia noticia);
 }

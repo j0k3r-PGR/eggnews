@@ -41,6 +41,9 @@ public class NoticiaDaoImpl implements NoticiaDao{
         noticiaRepositorio.save(noticia);
     }
 
-
+    @Override
+    public void eliminarNoticia(Noticia noticia) {
+        noticiaRepositorio.delete(noticia);
+    }
     
 }

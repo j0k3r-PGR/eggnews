@@ -15,4 +15,5 @@ public class NoticiaDtoIntro {
     private String texto;
 
     private String autor;
+
 }

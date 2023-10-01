@@ -8,6 +8,7 @@ export default function CardNoticia({ id, titulo, texto, autor, fechaAlta }) {
                 <h4 className="card-title">{titulo}</h4>
                 <p className="card-text">{texto.slice(0,200)}....</p>
                 <p>Autor: {autor}</p>
+                
                 <p> Fecha de publicacion: 
                     {
                         new Date(fechaAlta).toLocaleDateString("es-ES", {
