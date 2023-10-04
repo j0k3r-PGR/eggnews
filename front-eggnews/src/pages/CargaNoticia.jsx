@@ -23,7 +23,7 @@ export default function CargaNoticia() {
 
     const handleClick = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://localhost:8080/noticias/save", {
+        const response = await fetch("http://mauriciomaldonadoprg.online:8080/eggnews/noticias/save", {
             method: 'POST',
             headers : {
                 "Content-Type" : "application/json",

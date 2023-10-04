@@ -17,7 +17,7 @@ export default function ListarNoticiasAdmin() {
     };
 
     useEffect(() => {
-        fetch('http://localhost:8080/noticias/listaradmin')
+        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/listaradmin')
             .then(res => res.json())
             .then(noticias => setNoticias(noticias))
     }, [eliminarId])
@@ -25,7 +25,7 @@ export default function ListarNoticiasAdmin() {
     const noticiasOrdenadas = noticias.sort((a, b) => b.fechaAlta - a.fechaAlta)
 
     const eliminarNoticia = () =>{
-        fetch('http://localhost:8080/noticias/delete/'+eliminarId, {
+        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/delete/'+eliminarId, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

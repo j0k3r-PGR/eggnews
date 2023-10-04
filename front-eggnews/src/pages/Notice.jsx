@@ -8,7 +8,7 @@ export default function Notice(){
     const [noticia, setNoticia] = useState({});
 
     useEffect(() => {
-        fetch('http://localhost:8080/noticias/buscar/' + id)
+        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/buscar/' + id)
             .then(res => res.json())
             .then(res => setNoticia(res))
     }, [])

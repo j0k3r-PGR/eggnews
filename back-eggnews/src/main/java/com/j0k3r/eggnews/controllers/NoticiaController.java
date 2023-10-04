@@ -23,37 +23,37 @@ public class NoticiaController {
     @Autowired
     private NoticiaService noticiaService;
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("*")
     @GetMapping("/listar")
     public ResponseEntity<?> listarNoticias(){
         return noticiaService.listarTodas();
     }
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("*")
     @GetMapping("/listaradmin")
     public ResponseEntity<?> listarNoticiasAdmin(){
         return noticiaService.listarTodasAdmin();
     }
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("*")
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarNoticiaPorId(@PathVariable Long id){
         return noticiaService.buscarPorId(id);
     }
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("*")
     @PostMapping("/save")
     public ResponseEntity<?> salvarNoticia(@RequestBody NoticiaDtoIntro noticia ){
         return noticiaService.guardarNoticia(noticia.getTitulo(),noticia.getTexto(),noticia.getAutor());
     }
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("*")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id){
         return noticiaService.eliminarNoticia(id);
     }
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("*")
     @PostMapping("/modificar/{id}")
     public ResponseEntity<?> modificarNoticia(@PathVariable Long id, @RequestBody NoticiaDtoSend noticia){
         return noticiaService.modificarNoticia(noticia.getId(),noticia.getTitulo(),noticia.getTexto(),noticia.getAutor(),noticia.isAlta());

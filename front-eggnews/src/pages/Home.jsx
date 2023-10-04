@@ -7,7 +7,7 @@ export default function Home(){
     const [noticias, setNoticias] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:8080/noticias/listar')
+        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/listar')
             .then(res => res.json())
             .then(noticias => setNoticias(noticias.reverse()))
     },[])
@@ -15,7 +15,6 @@ export default function Home(){
     return(
         <div className="container"> 
             <h2 className="mt-3">Todas Las Noticias</h2>
-
                 {
                     noticias.length === 0 && 
                     <div className="alert alert-secondary">

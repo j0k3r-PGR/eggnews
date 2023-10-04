@@ -11,7 +11,7 @@ export default function ModificarNoticia() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:8080/noticias/buscar/' + id)
+        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/buscar/' + id)
             .then(res => res.json())
             .then(res => setNoticia(res))
     }, [])
@@ -33,7 +33,7 @@ export default function ModificarNoticia() {
 
     const handleClick = async (e) => {
         e.preventDefault()
-        const response = await fetch('http://localhost:8080/noticias/modificar/' + id, {
+        const response = await fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/modificar/' + id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
