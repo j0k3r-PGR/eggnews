@@ -10,7 +10,7 @@ public interface UserDao {
 
     Optional<UserEntity> findByUsername(String username);
 
-    List<UserEntity> findAll();
+    Iterable<UserEntity> findAll();
 
     List<UserEntity> findByAlta(Boolean alta);
 }

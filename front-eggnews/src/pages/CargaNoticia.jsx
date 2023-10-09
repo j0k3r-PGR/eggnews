@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "../config/axios"
+import { ClipLoader } from "react-spinners";
 
 import { errors } from '../utils/Errors'
+import Input from "../components/Input";
 
 export default function CargaNoticia() {
 
     const [noticia, setNoticia] = useState({
         titulo: "",
         texto: "",
-        autor: ""
+        autor: localStorage.getItem("name") + " " + localStorage.getItem('surname')
     })
 
+    const [guardando, setGuardando] = useState(false)
+
     const [guardado, setGuardado] = useState(false);
+
     const [error, setError] = useState(0);
 
     const handleChange = (e) => {
@@ -23,46 +29,50 @@ export default function CargaNoticia() {
 
     const handleClick = async (e) => {
         e.preventDefault()
-        const response = await fetch("http://mauriciomaldonadoprg.online:8080/eggnews/noticias/save", {
-            method: 'POST',
-            headers : {
-                "Content-Type" : "application/json",
-            },
-            body: JSON.stringify(noticia),
+        setNoticia({
+            ...noticia,
+            autor: localStorage.getItem("name") + " " + localStorage.getItem('surname')
         })
-        if (response.ok){
-            setError(0)
-                setNoticia({
-                    titulo: "",
-                    texto: "",
-                    autor: "",
-                    imagen: NaN
-                })
-                setGuardado(response.ok)
-        }else{
-            setError(response.status)
-            setGuardado(false)
-        }
+        setGuardando(true)
+        await axios.post('admin/noticias/save', JSON.stringify(noticia), {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            mode: 'no-cors'
+        }).then(() => {
+            setGuardando(false)
+            setGuardado(true)
+            setNoticia({
+                titulo: "",
+                texto: "",
+                autor: ""
+            })
+        })
+            .catch((err) => {
+                setError(err?.response?.status)
+                setGuardado(false)
+                setGuardando(false)
+                return 0;
+            });
+
     }
 
     return (
         <>
+            {
+                guardando &&
+                <div className="enviando">
+                    <ClipLoader className="spiner-enviando" color="#276559" />
+                </div>
+            }
+
             <div className="card container mt-5">
                 <div className="card-body">
                     <h2>Carga de noticia</h2>
                     <form action="">
-                        <div className="form-group mt-3">
-                            <label htmlFor="titulo">Titulo</label>
-                            <input type="text" className="form-control" name="titulo" onChange={handleChange} value={noticia.titulo} />
-                        </div>
-                        <div className="form-group mt-3">
-                            <label htmlFor="texto">Texto</label>
-                            <textarea className="form-control" name="texto" rows="3" onChange={handleChange} value={noticia.texto} />
-                        </div>
-                        <div className="form-group mt-3">
-                            <label htmlFor="autor">Autor</label>
-                            <input type="text" className="form-control" name="autor" onChange={handleChange} value={noticia.autor} />
-                        </div>
+                        <Input label="Titulo" type="text" value={noticia.titulo} name="titulo" handleChange={handleChange} />
+                        <Input label="Texto" type="text" value={noticia.texto} name="texto" handleChange={handleChange} textArea={true} />
+                        <Input label="Autor" type="text" value={noticia.autor} name="autor" disabled={true} />
                         <button className="btn btn-primary mt-3" onClick={handleClick}>Enviar</button>
                     </form>
                 </div>
@@ -72,7 +82,7 @@ export default function CargaNoticia() {
                 <div className="alert alert-success guardado-exito" role="alert">
                     <p>Noticia guardada con éxito</p>
                     <button className="btn-close" onClick={() => setGuardado(false)} aria-label="Close"></button>
-                    <Link to="/admin/listar" className="btn btn-primary btn-volver">Volver</Link>
+                    <Link to="/eggnews/admin/listar" className="btn btn-primary btn-volver">Volver</Link>
                 </div>
             }
             {

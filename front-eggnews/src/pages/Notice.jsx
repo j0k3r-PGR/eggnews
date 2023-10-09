@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom"
+import axios from "../config/axios"
 
 export default function Notice(){
 
@@ -8,9 +9,8 @@ export default function Notice(){
     const [noticia, setNoticia] = useState({});
 
     useEffect(() => {
-        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/buscar/' + id)
-            .then(res => res.json())
-            .then(res => setNoticia(res))
+        axios('/noticias/buscar/' + id)
+        .then(res => setNoticia(res.data))
     }, [])
 
     return(
@@ -25,7 +25,7 @@ export default function Notice(){
                                         hour: "numeric",
                                         minute: "numeric"
                                     })}</p>
-            <Link className="btn btn-primary" to="/">Volver</Link>
+            <Link className="btn btn-primary" to="/eggnews">Volver</Link>
 
         </div>
     )

@@ -16,31 +16,31 @@ import com.j0k3r.eggnews.models.auth.UserEntity;
 import com.j0k3r.eggnews.repositories.UserRepository;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UserDetailsService {
 
-   @Autowired
-   private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        
-        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> 
-                new UsernameNotFoundException("username not found"));
-        
-        if (!userEntity.getAlta()){
+
+        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(()
+                -> new UsernameNotFoundException("username not found"));
+
+        if (!userEntity.getAlta()) {
             throw new UsernameNotFoundException("user inabilited");
         }
 
         Collection<? extends GrantedAuthority> authorities = userEntity.getRoles().stream()
-        .map( role -> new SimpleGrantedAuthority("ROLE_".concat(role.getName().name())))
-        .collect(Collectors.toSet());
+                .map(role -> new SimpleGrantedAuthority("ROLE_".concat(role.getName().name())))
+                .collect(Collectors.toSet());
 
-        return new User(userEntity.getUsername(),userEntity.getPassword(),
-                    true,
-                    true,
-                    true,
-                    true,
-                    authorities);
+        return new User(userEntity.getUsername(), userEntity.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                authorities);
     }
-    
+
 }

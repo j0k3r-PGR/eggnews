@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
+import { ClipLoader } from "react-spinners"
+import axios from "../config/axios"
+import Input from '../components/Input'
 
 export default function ModificarNoticia() {
 
@@ -7,17 +10,43 @@ export default function ModificarNoticia() {
 
     const [noticia, setNoticia] = useState({})
 
+    const [guardando, setGuardando] = useState(false)
+
+    const [cargando, setCargando] = useState(true)
+
     const [guardado, setGuardado] = useState(false);
+
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/buscar/' + id)
-            .then(res => res.json())
-            .then(res => setNoticia(res))
+        let isMounted = true
+
+        const controller = new AbortController()
+
+        const getNotices = async () => {
+            await axios.get('/noticias/buscar/' + id, {
+                signal: controller.signal
+            })
+                .then(res => {
+                    isMounted && setNoticia(res.data)
+                    localStorage.setItem('autor', res.data.autor)
+                    setCargando(false)
+                })
+                .catch(err => {
+                    setCargando(false)
+                    console.log(err)
+                });
+        }
+
+        getNotices()
+
+        return () => {
+            isMounted = false
+            controller.abort()
+        }
     }, [])
 
     const handleChange = (e) => {
-        console.log(e.target.checked)
         setNoticia({
             ...noticia,
             [e.target.name]: e.target.value
@@ -33,53 +62,57 @@ export default function ModificarNoticia() {
 
     const handleClick = async (e) => {
         e.preventDefault()
-        const response = await fetch('http://mauriciomaldonadoprg.online:8080/eggnews/noticias/modificar/' + id, {
-            method: 'POST',
+        setGuardando(true)
+        setNoticia({
+            ...noticia,
+            autor: localStorage.getItem('autor')
+        })
+        await axios.post('/admin/noticias/modificar/' + id, JSON.stringify(noticia), {
             headers: {
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify(noticia)
-        });
-        if (response.ok) {
+        }).then(() => {
+            setGuardando(false)
             setError(false)
-            setGuardado(response.ok)
-        } else {
-            setGuardado(false)
-            setError(true)
-        }
-    }
+            setGuardado(true)
+            localStorage.setItem('autor',"")
+        })
+            .catch(() => {
+                setGuardando(false)
+                setGuardado(false)
+                setError(true)
+            });
+
+    };
 
     return (
         <>
+            {
+                guardando || cargando &&
+                <div className="enviando">
+                    <ClipLoader className="spiner-enviando" color="#276559" />
+                </div>
+            }
             <h2>Modificar</h2>
             <div className="card container">
                 <div className="card-body container">
                     <form action="">
-                        <div className="form-group">
-                            <label>Titulo</label>
-                            <input type="text" className="form-control" value={noticia.titulo} name="titulo" onChange={handleChange} />
-                        </div>
-                        <div className="form-group mt-3">
-                            <label>Texto</label>
-                            <textarea className="form-control" rows="3" value={noticia.texto} name="texto" onChange={handleChange} ></textarea>
-                        </div>
-                        <div className="form-group mt-3">
-                            <label>Autor</label>
-                            <input type="text" className="form-control" value={noticia.autor} name="autor" onChange={handleChange} />
-                        </div>
+                        <Input label="Titulo: " type="text" value={noticia.titulo} name="titulo" handleChange={handleChange} />
+                        <Input label="Texto: " type="text" value={noticia.texto} name="texto" handleChange={handleChange} textArea={true} />
+                        <Input label="Autor: " type="text" value={noticia.autor} name="autor" disabled={true} />
                         <div className="form-group mt-3">
                             <label>Alta</label>
                             <input type="checkbox" className="checkbox" defaultChecked={noticia.alta} name="alta" onClick={handleChangeCheck} />
                         </div>
 
-                        <button type="submit" className="btn btn-primary" onClick={handleClick}>Modificar</button>
+                        <button type="submit" className="btn btn-primary mt-3" onClick={handleClick}>Modificar</button>
                     </form>
                     {
                         guardado &&
                         <div className="alert alert-success guardado-exito container" role="alert">
                             <p>Noticia guardada con éxito</p>
                             <button className="btn-close" onClick={() => setGuardado(false)} aria-label="Close"></button>
-                            <Link to="/admin/listar" className="btn btn-primary btn-volver">Volver</Link>
+                            <Link to="/eggnews/admin/listar" className="btn btn-primary btn-volver">Volver</Link>
                         </div>
                     }
                     {
@@ -90,8 +123,8 @@ export default function ModificarNoticia() {
                         </div>
                     }
                 </div>
-                <div>
-                    <Link className="btn btn-secondary" to="/admin/listar">Volver</Link>
+                <div className="text-center">
+                    <Link className="btn btn-secondary mt-5 mb-3" to="/eggnews/admin/listar">Volver</Link>
                 </div>
             </div>
         </>

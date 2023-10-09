@@ -20,7 +20,7 @@ export default function CardNoticia({ id, titulo, texto, autor, fechaAlta }) {
                         })
                     }
                 </p>
-                <Link to={`/noticia/${id}`} className="btn btn-primary">Leer más</Link>
+                <Link to={`noticia/${id}`} className="btn btn-primary">Leer más</Link>
             </div>
         </div>
     )

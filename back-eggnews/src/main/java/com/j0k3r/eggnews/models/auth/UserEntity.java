@@ -40,7 +40,6 @@ public class UserEntity {
     @Column(nullable = false)
     private Set<RoleEntity> roles;
     private String token;
-    private String refreshToken;
     @Column(nullable = false,length = 40)
     private String name;
     @Column(nullable = false,length = 40)
@@ -48,5 +47,4 @@ public class UserEntity {
 
     @Builder.Default
     private Boolean alta= true;
-
 }

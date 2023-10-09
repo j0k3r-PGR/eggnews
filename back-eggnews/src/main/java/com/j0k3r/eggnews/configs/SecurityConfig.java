@@ -17,7 +17,7 @@ import com.j0k3r.eggnews.jwt.JwtAuthorizationFilter;
 import com.j0k3r.eggnews.services.UserDetailsServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -40,9 +40,9 @@ public class SecurityConfig {
 
         httpSecurity.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/").permitAll();
-            auth.requestMatchers("/admin/**").hasAnyRole("ADMIN");
-            auth.requestMatchers("/noticias/**").hasAnyRole("ADMIN","EMPLEADO");
+            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/noticias/**")).permitAll();
+            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/noticias")).hasAnyRole("ADMIN","EMPLEADO");
+            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/user/**")).hasAnyRole("ADMIN");
             auth.anyRequest().authenticated();
         })
         .sessionManagement(session -> session

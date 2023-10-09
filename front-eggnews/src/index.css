@@ -19,13 +19,26 @@
 }
 .content-navbar{
     display: flex;
-    justify-content : space-between;
+    justify-content: space-between;
 }
 
 .links{
     display: flex;
     flex-direction: row;
     gap: 20px;
+}
+
+@media screen and (max-width: 480px) {
+    .links {
+      display: none;
+    }
+    .menu{
+        display: block !important;
+    }
+  }
+
+.menu{
+    display: none;
 }
 
 .show-menu{
@@ -36,11 +49,36 @@
 /* Admin */
 
 .h3-admin{
-    width: 100% !important;
+    width: 100%;
+}
+
+.tr-spinner{
+    display: grid;
+    place-content: center;
+}
+
+.spinner{
+    display: block !important;
+}
+
+.display-none{
+    display: none;
 }
 
 
 /* Carga noticia */
+
+.enviando{
+    background-color: #2f2f2f3f;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    place-content: center;
+    z-index: 1;
+}
 
 .guardado-exito{
     font-size: 20px;

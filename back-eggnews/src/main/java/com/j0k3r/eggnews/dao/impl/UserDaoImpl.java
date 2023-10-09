@@ -27,8 +27,8 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
+    public Iterable<UserEntity> findAll() {
+        return  userRepository.findAll();
     }
 
     @Override
