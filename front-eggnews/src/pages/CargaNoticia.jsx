@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "../config/axios"
 import { ClipLoader } from "react-spinners";
@@ -11,14 +11,46 @@ export default function CargaNoticia() {
     const [noticia, setNoticia] = useState({
         titulo: "",
         texto: "",
-        autor: localStorage.getItem("name") + " " + localStorage.getItem('surname')
+        autor: localStorage.getItem("name") + " " + localStorage.getItem('surname'),
+        category: {
+            id: 4
+        },
+        username : localStorage.getItem('username')
     })
+
+    const [loading, setLoading] = useState(false)
+
+    const [categories, setCategories] = useState([])
 
     const [guardando, setGuardando] = useState(false)
 
     const [guardado, setGuardado] = useState(false);
 
     const [error, setError] = useState(0);
+
+
+    useEffect(() => {
+        let isMounted = true
+
+        const controller = new AbortController()
+
+        const getCategoies = async () => {
+            await axios.get('/category/all', {
+                signal: controller.signal,
+            })
+                .then(res => {
+                    isMounted && setCategories(res.data)
+                    setLoading(false)
+                })
+                .catch(err => console.log(err));
+        }
+        getCategoies()
+        return () => {
+            isMounted = false
+            controller.abort()
+        }
+    }, []);
+
 
     const handleChange = (e) => {
         setNoticia({
@@ -27,14 +59,26 @@ export default function CargaNoticia() {
         })
     }
 
+    const handleChangeCategory = (e) => {
+        setNoticia({
+            ...noticia,
+            category: {
+                id: e.target.value
+            }
+        })
+    }
+
+
     const handleClick = async (e) => {
         e.preventDefault()
         setNoticia({
             ...noticia,
-            autor: localStorage.getItem("name") + " " + localStorage.getItem('surname')
+            autor: localStorage.getItem("name") + " " + localStorage.getItem('surname'),
+            username : localStorage.getItem('username')
         })
+        console.log(noticia)
         setGuardando(true)
-        await axios.post('admin/noticias/save', JSON.stringify(noticia), {
+        await axios.post('admin/noticias/save/'+localStorage.getItem("id"), JSON.stringify(noticia), {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
@@ -60,19 +104,30 @@ export default function CargaNoticia() {
     return (
         <>
             {
-                guardando &&
+                guardando || loading &&
                 <div className="enviando">
                     <ClipLoader className="spiner-enviando" color="#276559" />
                 </div>
             }
 
             <div className="card container mt-5">
-                <div className="card-body">
+                <div className="card-body"> 
                     <h2>Carga de noticia</h2>
                     <form action="">
                         <Input label="Titulo" type="text" value={noticia.titulo} name="titulo" handleChange={handleChange} />
                         <Input label="Texto" type="text" value={noticia.texto} name="texto" handleChange={handleChange} textArea={true} />
                         <Input label="Autor" type="text" value={noticia.autor} name="autor" disabled={true} />
+                        <div className="form-group mt-3">
+                            <select name="category" className="form-control mt-1" onChange={handleChangeCategory}>
+                                {
+                                    categories.map(category => {
+                                        return (
+                                            <option key={category?.id} value={category?.id}>{category?.name}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
                         <button className="btn btn-primary mt-3" onClick={handleClick}>Enviar</button>
                     </form>
                 </div>

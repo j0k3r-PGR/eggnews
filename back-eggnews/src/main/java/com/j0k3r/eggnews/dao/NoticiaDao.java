@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 import com.j0k3r.eggnews.models.Noticia;
+import com.j0k3r.eggnews.models.auth.UserEntity;
 
 @Component
 public interface NoticiaDao {
@@ -20,4 +21,6 @@ public interface NoticiaDao {
     void modificarNoticia(Noticia noticia);
 
     void eliminarNoticia(Noticia noticia);
+
+    Iterable<Noticia> findByUser(UserEntity user);
 }

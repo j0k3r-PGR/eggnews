@@ -1,14 +1,33 @@
-import { Outlet, Link } from "react-router-dom"
+import { Outlet, Link, useNavigate } from "react-router-dom"
 import { useContext, useEffect } from "react"
+import axios from "../config/axios"
 import NoticeContext from '../providers/show'
 
 export default function Admin() {
 
+    const navigate = useNavigate();
 
     const noticeContext = useContext(NoticeContext)
 
     const {setShow} = noticeContext
 
+    useEffect(() => {
+        // axios.get('/admin/noticias/listar/'+localStorage.getItem('username'),{
+            axios.get("/category/all",{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            mode: 'no-cors'
+        })
+        .then(() => {
+
+        }
+        )
+        .catch(() => {
+            localStorage.clear()
+            navigate("/eggnews/login")
+        })
+    }, [])
 
     const handleClickAlta = (e) => {
         setShow({

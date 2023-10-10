@@ -14,6 +14,10 @@ import Login from './pages/Login.jsx'
 import NoticeProvider from './providers/show/Provider.jsx'
 import AuthProvider from './providers/auth/Provider.jsx'
 import RequireAuth from './utils/RequireAuth.jsx'
+import SuperUserAdmin from './pages/SuperUserAdmin'
+import CargaUser from './pages/CargaUser'
+import ListarUserAdmin from './pages/ListarUserAdmin'
+import ModificarUser from './pages/ModificarUser'
 
 const route = createBrowserRouter([{
   path: "/",
@@ -41,6 +45,19 @@ const route = createBrowserRouter([{
   }, {
     path: "eggnews/login",
     element:<NoticeProvider>  <Login /> </NoticeProvider>
+  },{
+    path: "eggnews/superusers",
+    element: <SuperUserAdmin />,
+    children: [{
+      path: "cargar",
+      element: <CargaUser />
+    },{
+      path: "listar",
+      element: <ListarUserAdmin />
+    },{
+      path: "modificar/:id",
+      element: <ModificarUser />
+    }]
   }]
 }])
 

@@ -41,9 +41,10 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> {
             auth.requestMatchers(AntPathRequestMatcher.antMatcher("/noticias/**")).permitAll();
-            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/noticias")).hasAnyRole("ADMIN","EMPLEADO");
-            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/user/**")).hasAnyRole("ADMIN");
-            auth.anyRequest().authenticated();
+            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/category/**")).permitAll();
+            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasAnyRole("ADMIN","EMPLEADO");
+            auth.requestMatchers(AntPathRequestMatcher.antMatcher("/superuser/**")).hasAnyRole("ADMIN");
+            auth.anyRequest().permitAll();
         })
         .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

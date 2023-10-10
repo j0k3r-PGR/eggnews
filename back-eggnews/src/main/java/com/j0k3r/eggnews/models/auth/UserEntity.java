@@ -45,6 +45,12 @@ public class UserEntity {
     @Column(nullable = false,length = 40)
     private String surname;
 
+    private Long idRole;
+
     @Builder.Default
     private Boolean alta= true;
+
+    public void setIdRole(){
+        this.idRole = this.roles.iterator().next().getId();
+    }
 }

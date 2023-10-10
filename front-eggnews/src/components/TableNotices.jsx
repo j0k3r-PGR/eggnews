@@ -13,6 +13,7 @@ export default function TableNotices({ filtrarNoticias, setEliminarId, isLoading
                         <th scope="col">autor</th>
                         <th scope="col" className="display-none">fecha</th>
                         <th scope="col" className="display-none">Alta</th>
+                        <th scope="col">Categoria</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
@@ -35,9 +36,12 @@ export default function TableNotices({ filtrarNoticias, setEliminarId, isLoading
                                     }
                                 </td>
                                 <td className="display-none"><input className="checkbox" type="checkbox" defaultChecked={noticia.alta} disabled /></td>
+                                <td>{noticia.category.name}</td>
                                 <td>
                                     <Link className="btn btn-primary" to={`/eggnews/admin/modificar/${noticia.id}`}>Editar</Link>
-                                    <button className="btn btn-secondary" onClick={() => setEliminarId(noticia.id)} >Eliminar</button>
+                                    {localStorage.getItem('username') === "SUPERADMIN" &&
+                                        <button className="btn btn-secondary" onClick={() => setEliminarId(noticia.id)} >Eliminar</button>
+                                    }
                                 </td>
                             </tr>
                         ))}
@@ -53,7 +57,10 @@ export default function TableNotices({ filtrarNoticias, setEliminarId, isLoading
                         />
                     </div>
                     :
-                    <></>
+                    filtrarNoticias().length === 0 &&
+                    <div className="alert alert-secondary">
+                        No Hay Noticias Para Mostrar
+                    </div>
             }
         </>
     )

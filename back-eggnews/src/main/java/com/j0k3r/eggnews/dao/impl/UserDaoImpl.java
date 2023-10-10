@@ -1,6 +1,5 @@
 package com.j0k3r.eggnews.dao.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,22 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public Iterable<UserEntity> findAll() {
-        return  userRepository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
-    public List<UserEntity> findByAlta(Boolean alta) {
-        return userRepository.findByAlta(true);
+    public void deleteUser(UserEntity user) {
+        userRepository.delete(user);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public void updateUser(UserEntity user) {
+        userRepository.save(user);
     }
     
 }

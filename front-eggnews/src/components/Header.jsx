@@ -26,6 +26,12 @@ export default function Header() {
                                 <Link className="nav-link active" aria-current="page" to="/eggnews">Home</Link>
                             </li>
                             {
+                                localStorage.getItem('username') === "SUPERADMIN" &&
+                                <li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to="/eggnews/superusers">Usuarios</Link>
+                                </li>
+                            }
+                            {
                                 token ?
                                     <>
                                         <li className="nav-item dropdown">
@@ -47,6 +53,7 @@ export default function Header() {
                                         <Link className="nav-link active" aria-current="page" to="/eggnews/login">Login</Link>
                                     </li>
                             }
+                            
                         </ul>
                     </div>
                     <div className="menu">

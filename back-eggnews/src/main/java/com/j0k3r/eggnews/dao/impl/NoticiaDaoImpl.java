@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.j0k3r.eggnews.dao.NoticiaDao;
 import com.j0k3r.eggnews.models.Noticia;
+import com.j0k3r.eggnews.models.auth.UserEntity;
 import com.j0k3r.eggnews.repositories.NoticiaRepositorio;
 
 
@@ -44,6 +45,11 @@ public class NoticiaDaoImpl implements NoticiaDao{
     @Override
     public void eliminarNoticia(Noticia noticia) {
         noticiaRepositorio.delete(noticia);
+    }
+
+    @Override
+    public Iterable<Noticia> findByUser(UserEntity user) {
+        return noticiaRepositorio.findByUser(user);
     }
     
 }

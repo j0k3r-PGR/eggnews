@@ -64,21 +64,26 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             UserEntity userEntity = userOptional.get();
 
-            response.addHeader("Authorization", "Bearer " + token);
+            if (userEntity.getAlta()) {
 
-            Map<String, Object> httpResponse = new HashMap<>();
+                response.addHeader("Authorization", "Bearer " + token);
 
-            httpResponse.put("token", token);
-            httpResponse.put("message", "success login");
-            httpResponse.put("username", userDetails.getUsername());
-            httpResponse.put("name", userEntity.getName());
-            httpResponse.put("surname", userEntity.getSurname());
-            httpResponse.put("roles", userEntity.getRoles());
+                Map<String, Object> httpResponse = new HashMap<>();
 
-            response.getWriter().write(new ObjectMapper().writeValueAsString(httpResponse));
-            response.setStatus(HttpStatus.OK.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().flush();
+                httpResponse.put("token", token);
+                httpResponse.put("message", "success login");
+                httpResponse.put("username", userDetails.getUsername());
+                httpResponse.put("name", userEntity.getName());
+                httpResponse.put("surname", userEntity.getSurname());
+                httpResponse.put("roles", userEntity.getRoles().stream().map(e -> e.getName()).toList());
+                httpResponse.put("id", userEntity.getId());
+                httpResponse.put("idRole", userEntity.getIdRole());
+
+                response.getWriter().write(new ObjectMapper().writeValueAsString(httpResponse));
+                response.setStatus(HttpStatus.OK.value());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.getWriter().flush();
+            }
 
         }
 

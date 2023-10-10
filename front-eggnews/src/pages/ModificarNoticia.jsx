@@ -8,6 +8,8 @@ export default function ModificarNoticia() {
 
     const { id } = useParams()
 
+    const [categories, setCategories] = useState([])
+
     const [noticia, setNoticia] = useState({})
 
     const [guardando, setGuardando] = useState(false)
@@ -46,6 +48,29 @@ export default function ModificarNoticia() {
         }
     }, [])
 
+    useEffect(() => {
+        let isMounted = true
+
+        const controller = new AbortController()
+
+        const getCategoies = async () => {
+            await axios.get('/category/all', {
+                signal: controller.signal,
+            })
+                .then(res => {
+                    isMounted && setCategories(res.data)
+                    console.log(res.data)
+                    setLoading(false)
+                })
+                .catch(err => console.log(err));
+        }
+        getCategoies()
+        return () => {
+            isMounted = false
+            controller.abort()
+        }
+    }, []);
+
     const handleChange = (e) => {
         setNoticia({
             ...noticia,
@@ -57,6 +82,15 @@ export default function ModificarNoticia() {
         setNoticia({
             ...noticia,
             [e.target.name]: e.target.checked
+        })
+    }
+
+    const handleChangeCategory = (e) => {
+        setNoticia({
+            ...noticia,
+            category: {
+                id: e.target.value
+            }
         })
     }
 
@@ -100,6 +134,17 @@ export default function ModificarNoticia() {
                         <Input label="Titulo: " type="text" value={noticia.titulo} name="titulo" handleChange={handleChange} />
                         <Input label="Texto: " type="text" value={noticia.texto} name="texto" handleChange={handleChange} textArea={true} />
                         <Input label="Autor: " type="text" value={noticia.autor} name="autor" disabled={true} />
+                        <div className="form-group mt-3">
+                            <select name="category" className="form-control mt-1" onChange={handleChangeCategory}>
+                                {
+                                    categories.map(category => {
+                                        return (
+                                            <option selected={category?.id === noticia?.category?.id ?true : false} key={category?.id} value={category?.id}>{category?.name}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
                         <div className="form-group mt-3">
                             <label>Alta</label>
                             <input type="checkbox" className="checkbox" defaultChecked={noticia.alta} name="alta" onClick={handleChangeCheck} />

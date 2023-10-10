@@ -22,11 +22,12 @@ public class NoticiaController {
     @GetMapping("/listar")
     public ResponseEntity<?> listarNoticias(){
         return noticiaService.listarTodas();
-    }    
+    }
     
     @CrossOrigin("*")
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarNoticiaPorId(@PathVariable Long id){
         return noticiaService.buscarPorId(id);
     }    
+
 }

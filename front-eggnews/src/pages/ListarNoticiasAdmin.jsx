@@ -33,7 +33,8 @@ export default function ListarNoticiasAdmin() {
     const controller = new AbortController()
 
     const getNotices = async () => {
-      await axios.get('/admin/noticias/listaradmin', {
+      await axios.get( localStorage.getItem('username') ==="SUPERADMIN" ? '/superuser/noticias/listaradmin'  :  ('/admin/all/'+localStorage.getItem('username')), {
+      // await axios.get('/admin/all/'+localStorage.getItem('username'), {
         headers: {
           Authorization : `Bearer ${localStorage.getItem('token')}`
         },
@@ -54,7 +55,7 @@ export default function ListarNoticiasAdmin() {
 
   const eliminarNoticia = () => {
 
-    axios.delete('/admin/noticias/delete/' + eliminarId,{
+    axios.delete('/superuser/noticias/delete/' + eliminarId,{
       headers: {
         Authorization : `Bearer ${localStorage.getItem('token')}`
       }

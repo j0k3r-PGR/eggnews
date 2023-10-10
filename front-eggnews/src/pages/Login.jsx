@@ -1,16 +1,12 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Input from "../components/Input";
 import axios from "../config/axios"
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
-import NoticeContext from '../providers/show'
 
 
 export default function Login() {
 
-    const noticeContext = useContext(NoticeContext)
-
-    const {tokenValid, setTokenValid} = noticeContext
 
     const navigate = useNavigate()
 
@@ -40,9 +36,10 @@ export default function Login() {
                 const token = res?.data?.token
                 localStorage.setItem('token', token)
                 localStorage.setItem('username', res?.data?.username)
+                localStorage.setItem('id',res?.data?.id)
                 localStorage.setItem('name',res?.data?.name)
                 localStorage.setItem('surname', res?.data?.surname)
-                setTokenValid("valido")
+                localStorage.setItem("idRole", res?.data?.idRole)
                 setGuardando(false)
                 navigate("/eggnews/admin")
             })
@@ -75,13 +72,6 @@ export default function Login() {
                     <button className="btn-close" onClick={() => setError("")} aria-label="Close"></button>
                 </div>
 
-            }
-            {
-                tokenValid === "invalido" &&
-                <div className="alert alert-danger error-guardado" role="alert">
-                    <p>Su session ah expirado o sus credenciales son incorrectas</p>
-                    <button className="btn-close" onClick={() => setTokenValid("valido")} aria-label="Close"></button>
-                </div>
             }
             <div className="container mt-5">
                 <Input type={"text"} name={"username"} label={"Usuario"} handleChange={handleChange} value={user.username} />
