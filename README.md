@@ -20,3 +20,9 @@ Nos Solicitaron realizar una pagina el cual tendra noticias creadas por los usua
 - La aplicacion web esta alojada en un servidor personal
 
 url: https://mauriciomaldonadoprg.store/eggnews
+
+Usuarios Para probar la app
+
+user : TestUser
+password : TestUser
+
